@@ -1,24 +1,19 @@
 const express = require("express");
-
 const pg = require("pg");
 const cors = require("cors")
-const data = require('./Bureau_TOPO.json')
+const mydata = require('./Bureau_TOPO.json')
 const bodyParser = require("body-parser");
+const app = express();
+const {Client} = require('pg')
 
-
-
-
-const connectionString =
-  "postgresql://postgres:eZeu5iDt5OvhjTnjACcM@containers-us-west-95.railway.app:6273/railway";
-const pool = new pg.Pool({
-    connectionString,
+const DATABASE_URL = "postgresql://postgres:eZeu5iDt5OvhjTnjACcM@containers-us-west-95.railway.app:6273/railway";
+const client = new Client({
+    DATABASE_URL,
 });
 
-const app = express()
+module.exports = client;
 app.use(cors())
-const port = process.env.PORT || 5000
-const mydata = data.features
-
+app.use(bodyParser.json());
 
 
 
@@ -27,21 +22,17 @@ app.get('/', (req, res)=>{
   res.send("success")
 })
 
-app.get('/db', async (req, res)=>{
-  var data_res = await (await pool.query("SELECT id, name,  offre_ing, offre_tech FROM data")).rows
-  res.json({data_res})
-})
-
 app.post('/add_all', (req, res)=>{
-    mydata.forEach((feature)=>{
-        var geom = `POINT(${feature.geometry.coordinates[0]} ${feature.geometry.coordinates[1]});`
+    mydata.features.forEach((feature)=>{
+        var geom = `POINT(${feature.geometry.coordinates[0]} ${feature.geometry.coordinates[1]})`
         var offre_ing = feature.properties.Offre_ing;
         var offre_tech = feature.properties.Offre_tech;
         var nom = feature.properties.Nom;
         var query_string = `INSERT INTO bureau_topo(nom, offre_ing, offre_tech, geom) VALUES('${nom}', '${offre_ing}', '${offre_tech}', ST_GeomFromText('${geom}', 4326));`;
-        pool.query(query_string);
+        client.query(query_string);
     })
     res.send('done')
 })
+  const PORT = process.env.PORT || 3500;
 
-  app.listen(port, console.log('app running'));
+  app.listen(PORT, console.log('app running'));
