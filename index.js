@@ -1,5 +1,5 @@
 const express = require("express");
-const client = require("./connection.js");
+
 const pg = require("pg");
 const cors = require("cors")
 const data = require('./Bureau_TOPO.json')
