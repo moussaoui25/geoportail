@@ -10,7 +10,7 @@ require("dotenv").config();
 
 
 const connectionString =
-  "postgresql://postgres:BLsWHcahT5ZglrAxHSvH@containers-us-west-84.railway.app:6529/railway";
+  "postgresql://postgres:eZeu5iDt5OvhjTnjACcM@containers-us-west-95.railway.app:6273/railway";
 const pool = new pg.Pool({
     connectionString,
 });
