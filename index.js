@@ -44,6 +44,6 @@ app.post('/add_all', (req, res)=>{
     })
     res.send('done')
 })
-  const PORT = process.env.PORT || 3300;
 
-  app.listen(PORT, console.log('app running'));
+
+  app.listen(port, console.log('app running'));
