@@ -1,7 +1,13 @@
-import express, { query } from 'express'
-import pg from "pg";
-import cors from 'cors';
-import data from './Bureau_TOPO.json' assert { type: "json" };
+const express = require("express");
+const client = require("./connection.js");
+const pg = require("pg");
+const cors = require("cors")
+const data = require('./Bureau_TOPO.json')
+const bodyParser = require("body-parser");
+require("dotenv").config();
+
+
+
 
 const connectionString =
   "postgresql://postgres:BLsWHcahT5ZglrAxHSvH@containers-us-west-84.railway.app:6529/railway";
@@ -15,10 +21,7 @@ const port = process.env.PORT || 5000
 const mydata = data.features
 var search_result = []
 
- // get clinics
- var data = await pool.query(`SELECT id, name, offre_ing, offre_tech, st_x(geom) as lng, st_y(geom) as lat FROM data
- WHERE name ILIKE $1`,
-[ `%${search_query}%` ]).then(res=>{return res.rows})
+
 
 app.get('/', (req, res)=>{
   console.log(`${req} is asking for connection`)
